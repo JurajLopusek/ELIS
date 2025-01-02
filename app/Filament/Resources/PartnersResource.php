@@ -9,6 +9,8 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -100,6 +102,8 @@ class PartnersResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
+
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -108,7 +112,14 @@ class PartnersResource extends Resource
                 ]),
             ]);
     }
-
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                TextEntry::make('partner_name'),
+                TextEntry::make('country')
+            ]);
+    }
     public static function getRelations(): array
     {
         return [
@@ -122,6 +133,7 @@ class PartnersResource extends Resource
             'index' => Pages\ListPartners::route('/'),
             'create' => Pages\CreatePartners::route('/create'),
             'edit' => Pages\EditPartners::route('/{record}/edit'),
+
         ];
     }
 }
