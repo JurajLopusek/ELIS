@@ -2,13 +2,29 @@
 <html lang="sk">
 <head>
     <meta charset="utf-8">
+
+    <meta name="application-name" content="{{ config('app.name') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ config('app.name') }}</title>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    @filamentStyles
+    @vite('resources/css/app.css')
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 
     <!-- Styles -->
 
@@ -19,26 +35,28 @@
 
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+    @filamentStyles
     @livewireStyles
-{{--    @livewireScripts--}}
+    {{--    @livewireScripts--}}
 
-    <title>{{ $title ?? 'eRobots' }}</title>
+    <title>{{ $title ?? 'ELIS' }}</title>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 </head>
-<body>
-
-<div class="">
+<body class="flex h-screen">
+<!-- Navigation -->
+<aside class="bg-gray-50 text-white w-64 p-4">
     @include("components.nav.nav")
-</div>
-{{--@include('cookie-consent::index')--}}
+</aside>
 
-<div class="relative">
-
+<!-- Main Content -->
+<main class="flex-1 p-6 overflow-y-auto">
     {{ $slot }}
-</div>
-
-{{--@include('components.includes.footer')--}}
-
+    @filamentScripts
+    @vite('resources/js/app.js')
+</main>
 </body>
-
-
 </html>
