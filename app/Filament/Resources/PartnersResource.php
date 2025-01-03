@@ -94,8 +94,12 @@ class PartnersResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('partner_name')->sortable(),
-                Tables\Columns\TextColumn::make('country')->sortable(),
+                Tables\Columns\TextColumn::make('partner_name')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('country')
+                    ->sortable()
+                    ->searchable(),
 
             ])
             ->filters([
@@ -103,8 +107,8 @@ class PartnersResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-
                 Tables\Actions\EditAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

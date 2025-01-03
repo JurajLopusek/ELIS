@@ -9,10 +9,12 @@ use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,6 +25,8 @@ class ProductsResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'System Management';
+    protected static ?string $navigationLabel = 'Products';
+    protected static ?string $modelLabel = 'Products in ELIS store';
 
 
     public static function form(Form $form): Form
@@ -88,18 +92,17 @@ class ProductsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('serial_number')->sortable(),
-                Tables\Columns\TextColumn::make('name')->sortable(),
-                Tables\Columns\TextColumn::make('product_type')->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
 
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\CreateAction::make()->label('Add Product to Partner'),
 
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -108,14 +111,28 @@ class ProductsResource extends Resource
             ]);
     }
 
-     public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
-                TextEntry::make('serial_number'),
-                TextEntry::make('name')
+                Section::make('Product information')
+                    ->schema([
+                        TextEntry::make('serial_number'),
+                        TextEntry::make('name'),
+                        TextEntry::make('product_type'),
+                    ])->columns(3),
+                Section::make('Detail information')
+                    ->schema([
+                        TextEntry::make('calibration_time'),
+                        TextEntry::make('service_interval_time'),
+                        TextEntry::make('service_interval_m2'),
+                        TextEntry::make('service_interval_km'),
+                        TextEntry::make('application_subscription'),
+                        TextEntry::make('warning'),
+                    ])->columns(3),
             ]);
     }
+
     public static function getRelations(): array
     {
         return [
