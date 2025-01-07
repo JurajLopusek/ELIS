@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "ext-pdo": "*",
+        "bezhansalleh/filament-shield": "^3.3",
         "filament/filament": "^3.2",
         "filament/forms": "^3.2",
         "filament/tables": "^3.2",
