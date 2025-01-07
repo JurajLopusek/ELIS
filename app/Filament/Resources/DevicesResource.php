@@ -15,7 +15,10 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use App\Models\DeviceInUse;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DevicesResource extends Resource
@@ -66,6 +69,12 @@ class DevicesResource extends Resource
                     ->action(function ($record, $data) {
                         $record->partners_id = $data['partners_id'];
                         $record->save();
+                        DeviceInUse::create([
+                            'device_id' => $record->id,
+                            'partner_id' => $data['partners_id'],
+                            'device_name' => $record->device_name,
+                            'serial_number' => $record->serial_number,
+                        ]);
                     }),
                 Tables\Actions\EditAction::make()->label('Add Devices to Partner'),
 

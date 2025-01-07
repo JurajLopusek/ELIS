@@ -24,4 +24,9 @@ class Partners extends Model
     {
         return $this->hasMany(Devices::class);
     }
+
+    public function deviceInUses()
+    {
+        return $this->hasMany(DeviceInUse::class);
+    }
 }
