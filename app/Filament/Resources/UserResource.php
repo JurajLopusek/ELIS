@@ -55,6 +55,8 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('email')->copyable()->copyMessage('Email copied to clipboard'),
+                TextColumn::make('roles.name')->searchable(),
+
             ])
             ->filters([
                 //

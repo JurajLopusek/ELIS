@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Partners extends Model
 {
@@ -18,4 +19,9 @@ class Partners extends Model
         'contact_person1',
         'contact_person2',
     ];
+
+    public function devices(): HasMany
+    {
+        return $this->hasMany(Devices::class);
+    }
 }

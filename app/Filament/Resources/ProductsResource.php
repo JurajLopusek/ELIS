@@ -26,7 +26,6 @@ class ProductsResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'System Management';
     protected static ?string $navigationLabel = 'Products';
-    protected static ?string $modelLabel = 'Products in ELIS store';
 
 
     public static function form(Form $form): Form
@@ -84,7 +83,6 @@ class ProductsResource extends Resource
                             ->label('Warning')
                             ->required(),
                     ])->columns(2)
-
             ]);
     }
 
@@ -95,14 +93,13 @@ class ProductsResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
-
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\CreateAction::make()->label('Add Product to Partner'),
-
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Devices extends Model
 {
@@ -15,6 +16,11 @@ class Devices extends Model
         'device_type',
         'registration',
         'qc_data',
-        'text'
+        'text',
+        'partners_id'
     ];
+    public function partners() : BelongsTo
+    {
+        return $this->belongsTo(Partners::class);
+    }
 }
