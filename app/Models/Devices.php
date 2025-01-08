@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Devices extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'serial_number',
         'device_name',

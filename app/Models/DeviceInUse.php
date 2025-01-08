@@ -16,7 +16,13 @@ class DeviceInUse extends Model
         'device_id',
         'partner_id',
         'device_name',
-        'serial_number'];
+        'serial_number',
+        'device_type',
+        'registration',
+        'qc_data',
+        'created_at',
+        'updated_at',
+    ];
 
 //    public static function create(array $attributes)
 //    {
@@ -36,5 +42,10 @@ class DeviceInUse extends Model
     {
         return DB::table((new static)->table)->insert($attributes);
 
+    }
+
+    public function partners(): BelongsTo
+    {
+        return $this->belongsTo(Partners::class, 'partner_id',);
     }
 }

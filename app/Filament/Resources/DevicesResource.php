@@ -7,6 +7,7 @@ use App\Filament\Resources\DevicesResource\RelationManagers;
 use App\Models\Devices;
 use App\Models\Partners;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -26,11 +27,10 @@ class DevicesResource extends Resource
     protected static ?string $model = Devices::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationGroup = 'System Management';
+    protected static ?string $navigationGroup = 'Device Management';
     protected static ?string $navigationLabel = 'Devices';
 
     protected static ?string $modelLabel = 'Devices in ELIS store';
-
 
 
     public static function form(Form $form): Form
@@ -38,9 +38,14 @@ class DevicesResource extends Resource
         return $form
             ->schema([
                 TextInput::make('serial_number')->required()->unique(),
-                TextInput::make('device_name'),
+                TextInput::make('device_name')->required(),
                 TextInput::make('device_type')->required(),
-                TextInput::make('registration'),
+                DatePicker::make('registration')
+                    ->required()
+                    ->label('Date of registration')
+                    ->placeholder('Choose date of registration')
+                    ->displayFormat('d/m/Y')
+                    ->native(false),
                 TextInput::make('qc_data'),
                 Forms\Components\RichEditor::make('text'),
             ]);
@@ -52,14 +57,14 @@ class DevicesResource extends Resource
             ->columns([
                 TextColumn::make('serial_number')->searchable(),
                 TextColumn::make('device_name')->searchable(),
-                TextColumn::make('partners.partner_name')->searchable(),
+//                TextColumn::make('partners.partner_name')->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Action::make('addDeviceToPartner')
-                    ->label('Pridať zariadenie k partnerovi')
+                Action::make('add Partner to device')
+                    ->label('Add Partner')
                     ->form([
                         Select::make('partners_id')
                             ->label('Partner')
@@ -74,9 +79,17 @@ class DevicesResource extends Resource
                             'partner_id' => $data['partners_id'],
                             'device_name' => $record->device_name,
                             'serial_number' => $record->serial_number,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                            'device_type' => $record['device_type'],
+                            'registration' => $record['registration'],
+                            'qc_data' => $record['qc_data'],
+
                         ]);
+                        $record->delete();
                     }),
-                Tables\Actions\EditAction::make()->label('Add Devices to Partner'),
+
+                Tables\Actions\EditAction::make(),
 
             ])
             ->bulkActions([

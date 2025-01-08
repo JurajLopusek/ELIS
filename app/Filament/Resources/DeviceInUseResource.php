@@ -27,7 +27,8 @@ class DeviceInUseResource extends Resource
             ->schema([
                 TextInput::make('device_name')->required(),
                 TextInput::make('serial_number')->required(),
-                ]);
+
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -36,6 +37,10 @@ class DeviceInUseResource extends Resource
             ->columns([
                 TextColumn::make('device_name')->searchable(),
                 TextColumn::make('serial_number')->searchable(),
+                TextColumn::make('partners.partner_name')->searchable()->label('Partner Name'),
+                TextColumn::make("calibration"),
+                TextColumn::make('subscription'),
+
                 // Add other columns as necessary
             ])
             ->filters([
