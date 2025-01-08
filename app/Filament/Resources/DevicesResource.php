@@ -17,6 +17,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use App\Models\DeviceInUse;
+use Filament\Notifications\Notification;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -48,7 +49,10 @@ class DevicesResource extends Resource
                     ->native(false),
                 TextInput::make('qc_data'),
                 Forms\Components\RichEditor::make('text'),
+
+
             ]);
+
     }
 
     public static function table(Table $table): Table
