@@ -57,7 +57,6 @@ class DevicesResource extends Resource
             ->columns([
                 TextColumn::make('serial_number')->searchable(),
                 TextColumn::make('device_name')->searchable(),
-//                TextColumn::make('partners.partner_name')->searchable(),
             ])
             ->filters([
                 //
@@ -70,6 +69,9 @@ class DevicesResource extends Resource
                             ->label('Partner')
                             ->relationship('partners', 'partner_name')
                             ->required(),
+                        TextInput::make('cost')->numeric(),
+                        TextInput::make('Message')->nullable(),
+
                     ])
                     ->action(function ($record, $data) {
                         $record->partners_id = $data['partners_id'];
@@ -79,6 +81,7 @@ class DevicesResource extends Resource
                             'partner_id' => $data['partners_id'],
                             'device_name' => $record->device_name,
                             'serial_number' => $record->serial_number,
+                            'cost' => $data['cost'],
                             'created_at' => now(),
                             'updated_at' => now(),
                             'device_type' => $record['device_type'],

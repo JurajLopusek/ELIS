@@ -20,6 +20,8 @@ class DeviceInUse extends Model
         'device_type',
         'registration',
         'qc_data',
+        'cost',
+        'text',
         'created_at',
         'updated_at',
     ];

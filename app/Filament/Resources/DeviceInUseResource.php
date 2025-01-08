@@ -27,6 +27,7 @@ class DeviceInUseResource extends Resource
             ->schema([
                 TextInput::make('device_name')->required(),
                 TextInput::make('serial_number')->required(),
+                TextInput::make('cost')->required(),
 
             ]);
     }
