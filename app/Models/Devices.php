@@ -37,4 +37,8 @@ class Devices extends Model
     {
         return $this->belongsTo(Partners::class);
     }
+    public function products() : BelongsTo
+    {
+        return $this->belongsTo(Products::class);
+    }
 }

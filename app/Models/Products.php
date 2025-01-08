@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Products extends Model
 {
@@ -17,4 +18,8 @@ class Products extends Model
         'application_subscription',
         'warning',
     ];
+    public function devices(): HasMany
+    {
+        return $this->hasMany(Devices::class);
+    }
 }

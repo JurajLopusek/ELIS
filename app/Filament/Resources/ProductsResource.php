@@ -36,7 +36,7 @@ class ProductsResource extends Resource
                     ->description('Put the product information here')
                     ->schema([
                         TextInput::make('serial_number')
-                            ->label('Serial Number')
+                            ->label('Prefix Serial Number')
                             ->unique()
                             ->required(),
 

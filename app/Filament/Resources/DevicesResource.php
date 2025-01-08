@@ -39,8 +39,14 @@ class DevicesResource extends Resource
         return $form
             ->schema([
                 TextInput::make('serial_number')->required()->unique(),
-                TextInput::make('device_name')->required(),
+                Select::make('products_id')
+                    ->label('device_name')
+                    ->placeholder('Select device name')
+                    ->relationship('products', 'name')
+                    ->required(),
                 TextInput::make('device_type')->required(),
+                TextInput::make('cost')->numeric(),
+                TextInput::make('Message')->nullable(),
                 DatePicker::make('registration')
                     ->required()
                     ->label('Date of registration')
