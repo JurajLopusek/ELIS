@@ -27,4 +27,5 @@ class EditDevices extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
 }

@@ -22,6 +22,17 @@ class Devices extends Model
         'partners_id'
     ];
 
+    public static function eRaptor()
+    {
+        return self::where('device_name', 'eRaptor')->count();
+
+    }
+    public static function eRex()
+    {
+        return self::where('device_name', 'eRex')->count();
+
+    }
+
     public function partners() : BelongsTo
     {
         return $this->belongsTo(Partners::class);

@@ -49,11 +49,10 @@ class DevicesResource extends Resource
                     ->native(false),
                 TextInput::make('qc_data'),
                 Forms\Components\RichEditor::make('text'),
-
-
             ]);
 
     }
+
 
     public static function table(Table $table): Table
     {
@@ -112,7 +111,6 @@ class DevicesResource extends Resource
             //
         ];
     }
-
     public static function getPages(): array
     {
         return [
