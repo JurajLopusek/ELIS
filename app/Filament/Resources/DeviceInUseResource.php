@@ -54,6 +54,18 @@ class DeviceInUseResource extends Resource
                 // Define bulk actions as necessary
             ]);
     }
+//    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+//    {
+//        $user = auth()->user();
+//
+//        // Ak má používateľ oprávnenie "view_any_devices", zobrazí všetky záznamy
+//        if ($user->can('view_any_devices')) {
+//            return parent::getEloquentQuery();
+//        }
+//
+//        // Ak nemá oprávnenie, zobrazia sa iba jeho zariadenia
+//        return parent::getEloquentQuery()->where('partner_id', $user->id);
+//    }
 
     public static function getPages(): array
     {

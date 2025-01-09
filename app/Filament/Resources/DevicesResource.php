@@ -100,7 +100,6 @@ class DevicesResource extends Resource
                         ]);
                         $record->delete();
                     }),
-
                 Tables\Actions\EditAction::make(),
 
             ])
@@ -110,6 +109,7 @@ class DevicesResource extends Resource
                 ]),
             ]);
     }
+
 
     public static function getRelations(): array
     {

@@ -46,6 +46,22 @@ class DeviceInUse extends Model
 
     }
 
+    public static function eRaptor()
+    {
+        return self::where('device_name', 'eRaptor')->count();
+
+    }
+    public static function eRex()
+    {
+        return self::where('device_name', 'eRex')->count();
+
+    }
+    public static function eRaptor2()
+    {
+        return self::where('device_name', 'eRaptor 2.0')->count();
+
+    }
+
     public function partners(): BelongsTo
     {
         return $this->belongsTo(Partners::class, 'partner_id',);
