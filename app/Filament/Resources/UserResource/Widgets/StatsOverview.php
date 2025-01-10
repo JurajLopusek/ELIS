@@ -17,8 +17,9 @@ class StatsOverview extends BaseWidget
                 ->description('Active users in the system')
                 ->descriptionIcon('heroicon-o-chevron-up', 'before')
                 ->descriptionColor('success')
-                ->chart([2, 22, 10, 40])
+                ->chart([2, 22, 10, 40]),
         ];
+
     }
 
 }

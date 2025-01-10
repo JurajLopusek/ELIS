@@ -38,6 +38,11 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
+    public static function ADMIN_USERS()
+    {
+
+    }
+
     /**
      * Get the attributes that should be cast.
      *

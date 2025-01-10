@@ -21,7 +21,6 @@ class Devices extends Model
         'text',
         'partners_id'
     ];
-
     public static function eRaptor()
     {
         return self::where('device_name', 'eRaptor')->count();
