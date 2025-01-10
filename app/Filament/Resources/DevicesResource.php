@@ -42,7 +42,7 @@ class DevicesResource extends Resource
                 TextInput::make('serial_number')
                     ->required()
                     ->unique()
-                    ->regex('/^ER\d{5}[A-Z]\d{4}$/'),
+                    ->regex('/^ER[\dA-Z]\d{4}[A-Z]\d{4}$/'),
                 TextInput::make('device_name')->required(),
 
 //                Select::make('products_id')
@@ -54,11 +54,13 @@ class DevicesResource extends Resource
                     ->label('Device Type')
                     ->placeholder('Select device type')
                     ->options([
-                        'pro' => 'PRO',
-                        'pro gps' => 'PRO GPS',
-                        'pro rtk' => 'PRO RTK',
+                        'PRO' => 'PRO',
+                        'PRO GPS' => 'PRO GPS',
+                        'PRO RTK' => 'PRO RTK',
                         'list' => 'List',
                     ])
+                    ->searchable()
+                    ->preload()
                     ->required(),
 //                TextInput::make('device_type')->required(),
 

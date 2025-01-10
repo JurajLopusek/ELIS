@@ -50,7 +50,6 @@ class ProductsResource extends Resource
                                 'pro' => 'PRO',
                                 'pro gps' => 'PRO GPS',
                                 'pro rtk' => 'PRO RTK',
-
                             ])
                             ->searchable()
                             ->preload()

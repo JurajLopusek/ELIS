@@ -32,7 +32,11 @@ class Devices extends Model
         return self::where('device_name', 'eRex')->count();
 
     }
+    public static function eRaptor2()
+    {
+        return self::where('device_name', 'eRaptor 2.0')->count();
 
+    }
     public function partners() : BelongsTo
     {
         return $this->belongsTo(Partners::class);

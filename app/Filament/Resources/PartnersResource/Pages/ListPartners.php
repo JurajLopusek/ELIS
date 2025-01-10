@@ -16,4 +16,10 @@ class ListPartners extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            PartnersResource\Widgets\PartnersStatsWidgets::class
+        ];
+    }
 }

@@ -13,6 +13,7 @@ class DevicesStatsOverview extends BaseWidget
         return [
             Stat::make("eRaptor",Devices::eRaptor()),
             Stat::make("eRex",Devices::eRex()),
+            Stat::make("eRaptor 2.0",Devices::eRaptor2()),
 
 
         ];
