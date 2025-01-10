@@ -11,16 +11,6 @@ class EditDevices extends EditRecord
 {
     protected static string $resource = DevicesResource::class;
 
-    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
-    {
-        Notification::make()
-            ->title('Changed Devices!')
-            ->success()
-            ->body('Your changes have been saved')
-            ->send()
-            ->sendToDatabase(auth()->user());
-    }
-
     protected function getHeaderActions(): array
     {
         return [

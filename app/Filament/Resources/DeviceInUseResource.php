@@ -37,6 +37,7 @@ class DeviceInUseResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('device_name')->searchable(),
+                TextColumn::make('device_type')->searchable(),
                 TextColumn::make('serial_number')->searchable(),
                 TextColumn::make('partners.partner_name')->searchable()->label('Partner Name'),
                 TextColumn::make("calibration"),

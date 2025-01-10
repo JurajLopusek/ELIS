@@ -6,6 +6,7 @@ use App\Filament\Resources\DevicesResource\Pages;
 use App\Filament\Resources\DevicesResource\RelationManagers;
 use App\Models\Devices;
 use App\Models\Partners;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -38,21 +39,37 @@ class DevicesResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('serial_number')->required()->unique(),
-                Select::make('products_id')
-                    ->label('device_name')
-                    ->placeholder('Select device name')
-                    ->relationship('products', 'name')
+                TextInput::make('serial_number')
+                    ->required()
+                    ->unique()
+                    ->regex('/^ER\d{5}[A-Z]\d{4}$/'),
+                TextInput::make('device_name')->required(),
+
+//                Select::make('products_id')
+//                    ->label('device_name')
+//                    ->placeholder('Select device name')
+//                    ->relationship('products', 'products.name')
+//                    ->required(),
+                Select::make('device_type')
+                    ->label('Device Type')
+                    ->placeholder('Select device type')
+                    ->options([
+                        'pro' => 'PRO',
+                        'pro gps' => 'PRO GPS',
+                        'pro rtk' => 'PRO RTK',
+                        'list' => 'List',
+                    ])
                     ->required(),
-                TextInput::make('device_type')->required(),
-                TextInput::make('cost')->numeric(),
+//                TextInput::make('device_type')->required(),
+
                 TextInput::make('Message')->nullable(),
                 DatePicker::make('registration')
-                    ->required()
                     ->label('Date of registration')
-                    ->placeholder('Choose date of registration')
                     ->displayFormat('d/m/Y')
-                    ->native(false),
+                    ->native(false)
+                    ->default(Carbon::now()->format('Y-m-d')) // Nastaví dnešný dátum ako predvolenú hodnotu
+                    ->disabled()
+                ,
                 TextInput::make('qc_data'),
                 Forms\Components\RichEditor::make('text'),
             ]);
@@ -101,6 +118,8 @@ class DevicesResource extends Resource
                         $record->delete();
                     }),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),
+
 
             ])
             ->bulkActions([
