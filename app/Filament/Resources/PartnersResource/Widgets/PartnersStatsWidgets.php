@@ -15,10 +15,11 @@ class PartnersStatsWidgets extends BaseWidget
                 ->icon('heroicon-o-users')
                 ->chartColor('warning')
                 ->description('Active partners in the system')
-                ->descriptionIcon('heroicon-o-chevron-up', 'before')
+                ->descriptionIcon('heroicon-o-check', 'before')
                 ->descriptionColor('warning')
                 ->chart([2, 22, 10, 40]),
 
         ];
     }
 }
+
