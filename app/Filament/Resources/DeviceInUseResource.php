@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DeviceInUseResource\Pages;
 use App\Models\DeviceInUse;
+use App\Models\Devices;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -28,6 +29,9 @@ class DeviceInUseResource extends Resource
                 TextInput::make('device_name')->required(),
                 TextInput::make('serial_number')->required(),
                 TextInput::make('cost')->required(),
+                TextInput::make('product_id')->required(),
+                TextInput::make('partner_id')->required(),
+                TextInput::make('device_id')->required(),
 
             ]);
     }
@@ -35,13 +39,17 @@ class DeviceInUseResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('device_name')->searchable(),
-                TextColumn::make('device_type')->searchable(),
+            ->query(DeviceInUse::with(['devices' => function ($query) {
+                $query->withTrashed(); // Toto zabezpečí, že aj vymazané zariadenia budú zahrnuté
+            }]))->columns([
+                TextColumn::make('devices.products_id')->searchable()->label('Name'),
+//                TextColumn::make('device_type')->searchable(),
                 TextColumn::make('serial_number')->searchable(),
                 TextColumn::make('partners.partner_name')->searchable()->label('Partner Name'),
                 TextColumn::make("calibration"),
                 TextColumn::make('subscription'),
+                TextColumn::make('products')->searchable()->label('Name'),
+
 
                 // Add other columns as necessary
             ])

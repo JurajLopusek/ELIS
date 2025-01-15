@@ -22,4 +22,8 @@ class Products extends Model
     {
         return $this->hasMany(Devices::class);
     }
+    public static function findPrefix($prefix)
+    {
+        return self::where('serial_number', $prefix)->first();
+    }
 }

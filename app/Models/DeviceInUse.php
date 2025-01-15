@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\DB;
 
 class DeviceInUse extends Model
@@ -13,9 +14,9 @@ class DeviceInUse extends Model
     use HasFactory;
 
     protected $fillable = [
+        'product_id',
         'device_id',
         'partner_id',
-        'device_name',
         'serial_number',
         'device_type',
         'registration',
@@ -46,24 +47,45 @@ class DeviceInUse extends Model
 
     }
 
+    public static function whereHasDevices()
+    {
+        return self::whereHas('devices', function ($query) {
+            $query->onlyTrashed(); // Vyberie len zariadenia, ktoré sú vymazané
+        });
+    }
+
+
     public static function eRaptor()
     {
-        return self::where('device_name', 'eRaptor')->count();
+        return self::where('device_type', 'eRaptor')->count();
 
     }
+
     public static function eRex()
     {
-        return self::where('device_name', 'eRex')->count();
+        return self::where('device_type', 'eRex')->count();
 
     }
+
     public static function eRaptor2()
     {
-        return self::where('device_name', 'eRaptor 2.0')->count();
+        return self::where('device_type', 'eRaptor 2.0')->count();
 
+    }
+
+    public function devices(): BelongsTo
+    {
+        return $this->BelongsTo(Devices::class, 'device_id', 'id');
     }
 
     public function partners(): BelongsTo
     {
-        return $this->belongsTo(Partners::class, 'partner_id',);
+        return $this->belongsTo(Partners::class, 'partner_id', 'id');
     }
+
+    public function products(): BelongsTo
+    {
+        return $this->belongsTo(Products::class, 'product_id', 'id');
+    }
+
 }

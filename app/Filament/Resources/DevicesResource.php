@@ -6,12 +6,15 @@ use App\Filament\Resources\DevicesResource\Pages;
 use App\Filament\Resources\DevicesResource\RelationManagers;
 use App\Models\Devices;
 use App\Models\Partners;
+use App\Models\Products;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -23,6 +26,8 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class DevicesResource extends Resource
 {
@@ -40,16 +45,21 @@ class DevicesResource extends Resource
         return $form
             ->schema([
                 TextInput::make('serial_number')
+                    ->regex('/^ER[\dA-Z]\d{4}[A-Z]\d{4}$/')
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                        $prefix = substr($state, 0, 3);
+                        $product = Products::findPrefix($prefix);
+                        if ($product) {
+                            $set('device_name', $product->name);
+                            $set('products_id', $product->id);
+                        }
+                    })
                     ->required()
-                    ->unique()
-                    ->regex('/^ER[\dA-Z]\d{4}[A-Z]\d{4}$/'),
-                TextInput::make('device_name')->required(),
-
-//                Select::make('products_id')
-//                    ->label('device_name')
-//                    ->placeholder('Select device name')
-//                    ->relationship('products', 'products.name')
-//                    ->required(),
+                    ->unique(),
+                Select::make('products_id')
+                    ->relationship('products', 'name')
+                ,
                 Select::make('device_type')
                     ->label('Device Type')
                     ->placeholder('Select device type')
@@ -62,17 +72,18 @@ class DevicesResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required(),
-//                TextInput::make('device_type')->required(),
 
-                TextInput::make('Message')->nullable(),
                 DatePicker::make('registration')
-                    ->label('Date of registration')
-                    ->displayFormat('d/m/Y')
-                    ->native(false)
-                    ->default(Carbon::now()->format('Y-m-d')) // Nastaví dnešný dátum ako predvolenú hodnotu
-                    ->disabled()
-                ,
+                    ->label('Registration'),
+//                DatePicker::make('registration')
+//                    ->label('Date of registration')
+//                    ->displayFormat('d/m/Y') // Frontend display
+//                    ->native(false)
+//                    ->default(Carbon::now()->format('Y-m-d')) // Default backend value
+//                    ->disabled(),
+
                 TextInput::make('qc_data'),
+
                 Forms\Components\RichEditor::make('text'),
             ]);
 
@@ -84,7 +95,7 @@ class DevicesResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('serial_number')->searchable(),
-                TextColumn::make('device_name')->searchable(),
+                TextColumn::make('products.name')->searchable(),
             ])
             ->filters([
                 //
@@ -107,7 +118,6 @@ class DevicesResource extends Resource
                         DeviceInUse::create([
                             'device_id' => $record->id,
                             'partner_id' => $data['partners_id'],
-                            'device_name' => $record->device_name,
                             'serial_number' => $record->serial_number,
                             'cost' => $data['cost'],
                             'created_at' => now(),
@@ -138,6 +148,7 @@ class DevicesResource extends Resource
             //
         ];
     }
+
     public static function getPages(): array
     {
         return [
