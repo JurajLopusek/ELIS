@@ -35,24 +35,12 @@ class PartnersResource extends Resource
                             ->label('Partner Name')
                             ->required()
                             ->maxLength(255),
-
-                        TextInput::make('country')
-                            ->label('Country')
+                        TextInput::make('partner_email')
+                            ->label('Partner Email')
                             ->required()
                             ->maxLength(255),
-
-                        TextInput::make('distributor')
-                            ->label('Distributor')
-                            ->required()
-                            ->maxLength(255),
-
-                        TextInput::make('gps')
-                            ->label('GPS Coordinates')
-                            ->required()
-                            ->maxLength(255),
-
-                        TextInput::make('servis_distributor')
-                            ->label('Service Distributor')
+                        TextInput::make('partner_password')
+                            ->label('Partner Password')
                             ->required()
                             ->maxLength(255),
                     ])->columns(3),
@@ -60,6 +48,8 @@ class PartnersResource extends Resource
                 Forms\Components\Section::make('Partner company information')
                     ->description('Put the partner information here')
                     ->schema([
+
+
                         TextInput::make('ico')
                             ->label('ICO')
                             ->required()
@@ -74,17 +64,35 @@ class PartnersResource extends Resource
                             ->label('Address')
                             ->required()
                             ->maxLength(255),
-
+                        TextInput::make('country')
+                            ->label('Country')
+                            ->required()
+                            ->maxLength(255),
                         TextInput::make('contact_person1')
                             ->label('Contact Person 1')
                             ->nullable()
                             ->maxLength(255),
 
+                        TextInput::make('distributor')
+                            ->label('Distributor')
+                            ->required()
+                            ->maxLength(255),
+
+
+
+                        TextInput::make('servis_distributor')
+                            ->label('Service Distributor')
+                            ->required()
+                            ->maxLength(255),
                         TextInput::make('contact_person2')
                             ->label('Contact Person 2')
                             ->nullable()
                             ->maxLength(255),
-                    ])->columns(4),
+                        TextInput::make('gps')
+                            ->label('GPS Coordinates')
+                            ->required()
+                            ->maxLength(255),
+                    ])->columns(3),
 
 
             ]);
