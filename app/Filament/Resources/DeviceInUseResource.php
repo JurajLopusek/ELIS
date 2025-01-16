@@ -5,8 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DeviceInUseResource\Pages;
 use App\Models\DeviceInUse;
 use App\Models\Devices;
+use App\Models\Products;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -26,29 +31,42 @@ class DeviceInUseResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('device_name')->required(),
-                TextInput::make('serial_number')->required(),
-                TextInput::make('cost')->required(),
-                TextInput::make('product_id')->required(),
-                TextInput::make('partner_id')->required(),
-                TextInput::make('device_id')->required(),
+                TextInput::make('serial_number')
+                    ->regex('/^ER[\dA-Z]\d{4}[A-Z]\d{4}$/')
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                        $prefix = substr($state, 0, 3);
+                        $product = Products::findPrefix($prefix);
+                        if ($product) {
+                            $set('device_name', $product->name);
+                            $set('product_id', $product->id);
+                        }
+                    })
+                    ->required()
+                    ->unique(),
+                Select::make('product_id')
+                    ->relationship('products', 'name')
+                    ->disabled(),
+                Hidden::make('product_id'),
 
+                Select::make('partner_id')
+                    ->relationship('partners', 'partner_name'),  // Relácia na serial_number zariadenia
+                TextInput::make('cost')->required(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->query(DeviceInUse::with(['devices' => function ($query) {
-                $query->withTrashed(); // Toto zabezpečí, že aj vymazané zariadenia budú zahrnuté
-            }]))->columns([
-                TextColumn::make('devices.products_id')->searchable()->label('Name'),
-//                TextColumn::make('device_type')->searchable(),
-                TextColumn::make('serial_number')->searchable(),
+            ->columns([
+                TextColumn::make('serial_number')->searchable()
+                    ->label('Serial number')
+                    ->searchable(),
+                TextColumn::make('device_type')->searchable(),
                 TextColumn::make('partners.partner_name')->searchable()->label('Partner Name'),
                 TextColumn::make("calibration"),
                 TextColumn::make('subscription'),
-                TextColumn::make('products')->searchable()->label('Name'),
+                TextColumn::make('products.name')->searchable()->label('Name'),
 
 
                 // Add other columns as necessary
@@ -58,6 +76,8 @@ class DeviceInUseResource extends Resource
             ])
             ->actions([
                 // Define actions as necessary
+                Tables\Actions\ViewAction::make(),
+
             ])
             ->bulkActions([
                 // Define bulk actions as necessary
@@ -75,6 +95,15 @@ class DeviceInUseResource extends Resource
 //        // Ak nemá oprávnenie, zobrazia sa iba jeho zariadenia
 //        return parent::getEloquentQuery()->where('partner_id', $user->id);
 //    }
+    public static function afterSave($record)
+    {
+        // Ak sa záznam upravuje, aktualizujte hodnotu serial_number v zariadení
+        if ($record->devices) {
+            $device = $record->devices;
+            $device->serial_number = $record->serial_number; // Predpokladám, že serial_number je v DeviceInUse
+            $device->save();
+        }
+    }
 
     public static function getPages(): array
     {

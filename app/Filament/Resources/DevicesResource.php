@@ -10,6 +10,7 @@ use App\Models\Products;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -59,7 +60,10 @@ class DevicesResource extends Resource
                     ->unique(),
                 Select::make('products_id')
                     ->relationship('products', 'name')
-                ,
+                    ->disabled(),
+                Hidden::make('products_id'),
+
+
                 Select::make('device_type')
                     ->label('Device Type')
                     ->placeholder('Select device type')
@@ -69,18 +73,19 @@ class DevicesResource extends Resource
                         'PRO RTK' => 'PRO RTK',
                         'list' => 'List',
                     ])
+                    ->default('PRO')
                     ->searchable()
                     ->preload()
                     ->required(),
 
                 DatePicker::make('registration')
                     ->label('Registration'),
-//                DatePicker::make('registration')
-//                    ->label('Date of registration')
-//                    ->displayFormat('d/m/Y') // Frontend display
-//                    ->native(false)
-//                    ->default(Carbon::now()->format('Y-m-d')) // Default backend value
-//                    ->disabled(),
+                DatePicker::make('registration')
+                    ->label('Date of registration')
+                    ->displayFormat('d/m/Y') // Frontend display
+                    ->native(false)
+                    ->default(Carbon::now()->format('Y-m-d')) // Default backend value
+                    ->readOnly(),
 
                 TextInput::make('qc_data'),
 
@@ -108,6 +113,19 @@ class DevicesResource extends Resource
                             ->label('Partner')
                             ->relationship('partners', 'partner_name')
                             ->required(),
+                        Select::make('device_type')
+                            ->label('Device Type')
+                            ->placeholder('Select device type')
+                            ->options([
+                                'PRO' => 'PRO',
+                                'PRO GPS' => 'PRO GPS',
+                                'PRO RTK' => 'PRO RTK',
+                                'list' => 'List',
+                            ])
+                            ->default('PRO')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
                         TextInput::make('cost')->numeric(),
                         TextInput::make('Message')->nullable(),
 
@@ -116,13 +134,13 @@ class DevicesResource extends Resource
                         $record->partners_id = $data['partners_id'];
                         $record->save();
                         DeviceInUse::create([
-                            'device_id' => $record->id,
                             'partner_id' => $data['partners_id'],
+                            'product_id' => $record['products_id'],
                             'serial_number' => $record->serial_number,
                             'cost' => $data['cost'],
                             'created_at' => now(),
                             'updated_at' => now(),
-                            'device_type' => $record['device_type'],
+                            'device_type' => $data['device_type'],
                             'registration' => $record['registration'],
                             'qc_data' => $record['qc_data'],
 

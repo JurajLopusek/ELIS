@@ -13,6 +13,7 @@ class DeviceInUse extends Model
 {
     use HasFactory;
 
+    public mixed $partner_name;
     protected $fillable = [
         'product_id',
         'device_id',
@@ -46,6 +47,15 @@ class DeviceInUse extends Model
         return DB::table((new static)->table)->insert($attributes);
 
     }
+    public function setPartnerName(): ?string
+    {
+        $partner = $this->partner_id ? Partners::find($this->partner_id) : null;
+        // Skontroluj, či zariadenie existuje a nastaví jeho serial_number
+        if ($partner) {
+            return $partner->partner_name;
+        }
+        return null;
+    }
 
     public static function whereHasDevices()
     {
@@ -57,19 +67,19 @@ class DeviceInUse extends Model
 
     public static function eRaptor()
     {
-        return self::where('device_type', 'eRaptor')->count();
+        return self::where('cost', 'eRaptor')->count();
 
     }
 
     public static function eRex()
     {
-        return self::where('device_type', 'eRex')->count();
+        return self::where('cost', 'eRex')->count();
 
     }
 
     public static function eRaptor2()
     {
-        return self::where('device_type', 'eRaptor 2.0')->count();
+        return self::where('cost', 'eRaptor 2.0')->count();
 
     }
 

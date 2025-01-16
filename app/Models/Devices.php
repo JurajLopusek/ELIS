@@ -26,6 +26,7 @@ class Devices extends Model
         return self::where('products_id', 1)->count();
 
     }
+
     public static function eRex()
     {
         return self::where('products_id', 3)->count();
