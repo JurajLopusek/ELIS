@@ -77,9 +77,6 @@ class DevicesResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required(),
-
-                DatePicker::make('registration')
-                    ->label('Registration'),
                 DatePicker::make('registration')
                     ->label('Date of registration')
                     ->displayFormat('d/m/Y') // Frontend display

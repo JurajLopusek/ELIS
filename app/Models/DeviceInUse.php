@@ -67,19 +67,19 @@ class DeviceInUse extends Model
 
     public static function eRaptor()
     {
-        return self::where('cost', 'eRaptor')->count();
+        return self::where('product_id', 1)->count();
 
     }
 
     public static function eRex()
     {
-        return self::where('cost', 'eRex')->count();
+        return self::where('product_id', 3)->count();
 
     }
 
     public static function eRaptor2()
     {
-        return self::where('cost', 'eRaptor 2.0')->count();
+        return self::where('product_id', 2)->count();
 
     }
 
