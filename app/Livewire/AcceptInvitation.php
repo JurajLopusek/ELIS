@@ -15,13 +15,12 @@ use Filament\Pages\Dashboard;
 use Filament\Pages\SimplePage;
 use Illuminate\Validation\Rules\Password;
 
-class AcceptInvitation extends Component
+class AcceptInvitation extends SimplePage
 {
     use InteractsWithForms;
     use InteractsWithFormActions;
 
     protected static string $view = 'livewire.accept-invitation';
-
     public int $invitation;
     private Invitation $invitationModel;
 
@@ -29,11 +28,11 @@ class AcceptInvitation extends Component
 
     public function mount(): void
     {
-        $this->invitationModel = Invitation::all()->findOrFail($this->invitation);
-
+        $this->invitationModel = Invitation::findOrFail($this->invitation);
         $this->form->fill([
             'email' => $this->invitationModel->email
         ]);
+
     }
 
     public function form(Form $form): Form
