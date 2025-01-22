@@ -38,11 +38,6 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
-    public static function ADMIN_USERS()
-    {
-
-    }
-
     /**
      * Get the attributes that should be cast.
      *
@@ -56,8 +51,17 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function canAccessPanel(Panel $panel): bool
     {
-         return true;
+        if ($panel->getId() === 'admin') {
+            // Povolený prístup iba pre administrátora (kontrola emailu alebo roly)
+            return $this->hasRole('super_admin');
+        }
+
+        // Pre ostatné panely je prístup povolený
+        return true;
     }
 }

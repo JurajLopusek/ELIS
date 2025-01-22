@@ -25,7 +25,7 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->id('app')
-            ->path('app')
+            ->path('/app')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -52,7 +52,7 @@ class AppPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
-                FilamentShieldPlugin::make(),
+//                FilamentShieldPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,
