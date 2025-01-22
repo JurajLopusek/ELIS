@@ -4,6 +4,7 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\DeviceResource\Pages;
 use App\Filament\App\Resources\DeviceResource\RelationManagers;
+use App\Models\DeviceInUse;
 use App\Models\Devices;
 use App\Models\Products;
 use Carbon\Carbon;
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DeviceResource extends Resource
 {
-    protected static ?string $model = Devices::class;
+    protected static ?string $model = DeviceInUse::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -83,6 +84,10 @@ class DeviceResource extends Resource
             ->columns([
                 TextColumn::make('serial_number')->searchable(),
                 TextColumn::make('products.name')->searchable(),
+                TextColumn::make('products.id')->searchable(),
+                TextColumn::make('partners.id')->searchable(),
+
+
             ])
             ->filters([
                 //
