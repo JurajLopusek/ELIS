@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\Partners;
+use Filament\Pages\Dashboard;
 use Livewire\Component;
 use App\Models\Invitation;
 use App\Models\User;
@@ -11,9 +13,10 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
 use Filament\Pages\Concerns\InteractsWithFormActions;
-use Filament\Pages\Dashboard;
 use Filament\Pages\SimplePage;
 use Illuminate\Validation\Rules\Password;
+use Filament\Forms;
+
 
 class AcceptInvitation extends SimplePage
 {
@@ -39,28 +42,59 @@ class AcceptInvitation extends SimplePage
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->label(__('filament-panels::pages/auth/register.form.name.label'))
-                    ->required()
-                    ->maxLength(255)
-                    ->autofocus(),
-                TextInput::make('email')
-                    ->label(__('filament-panels::pages/auth/register.form.email.label'))
-                    ->disabled(),
-                TextInput::make('password')
-                    ->label(__('filament-panels::pages/auth/register.form.password.label'))
-                    ->password()
-                    ->required()
-                    ->rule(Password::default())
-                    ->same('passwordConfirmation')
-                    ->validationAttribute(__('filament-panels::pages/auth/register.form.password.validation_attribute')),
-                TextInput::make('passwordConfirmation')
-                    ->label(__('filament-panels::pages/auth/register.form.password_confirmation.label'))
-                    ->password()
-                    ->required()
-                    ->dehydrated(false),
-            ])
-            ->statePath('data');
+                Forms\Components\Section::make('Profile information')
+                    ->description('Put the profile information here')
+                    ->schema([
+
+                        TextInput::make('name')
+                            ->label(__('filament-panels::pages/auth/register.form.name.label'))
+                            ->required()
+                            ->maxLength(255)
+                            ->autofocus(),
+                        TextInput::make('email')
+                            ->label(__('filament-panels::pages/auth/register.form.email.label'))
+                            ->disabled(),
+                        TextInput::make('password')
+                            ->label(__('filament-panels::pages/auth/register.form.password.label'))
+                            ->password()
+                            ->required()
+                            ->rule(Password::default())
+                            ->same('passwordConfirmation')
+                            ->validationAttribute(__('filament-panels::pages/auth/register.form.password.validation_attribute')),
+                        TextInput::make('passwordConfirmation')
+                            ->label(__('filament-panels::pages/auth/register.form.password_confirmation.label'))
+                            ->password()
+                            ->required()
+                            ->dehydrated(false),
+                    ]),
+                Forms\Components\Section::make('Company information')
+                    ->description('Put the company information here')
+                    ->schema([
+                        TextInput::make('ico')
+                            ->label('ICO')
+                            ->required()
+                            ->numeric(),
+                        TextInput::make('company_name')
+                            ->label('Company name')
+                            ->required(),
+                        TextInput::make('dic')
+                            ->label('DIC')
+                            ->required()
+                            ->numeric(),
+                        TextInput::make('address')
+                            ->label('Address')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('city')
+                            ->label('City')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('postal_code')
+                            ->label('Postal Code')
+                            ->required()
+                            ->numeric(),
+                    ])->columns(1),
+            ])->statePath('data');
     }
 
     public function create(): void
@@ -72,12 +106,20 @@ class AcceptInvitation extends SimplePage
             'password' => $this->form->getState()['password'],
             'email' => $this->invitationModel->email,
         ]);
-
+        Partners::create([
+            'user_id' => $user->id,
+            'ico' => $this->form->getState()['ico'],
+            'company_name' => $this->form->getState()['company_name'],
+            'dic' => $this->form->getState()['dic'],
+            'address' => $this->form->getState()['address'],
+            'city' => $this->form->getState()['city'],
+            'postal_code' => $this->form->getState()['postal_code'],
+        ]);
         auth()->login($user);
 
         $this->invitationModel->delete();
-
         $this->redirect(Dashboard::getUrl());
+
     }
 
     /**

@@ -13,3 +13,4 @@ Route::get('/devices', function () {
 Route::middleware('signed')
     ->get('invitation/{invitation}/accept', AcceptInvitation::class)
     ->name('invitation.accept');
+

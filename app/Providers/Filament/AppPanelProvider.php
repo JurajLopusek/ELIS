@@ -7,6 +7,7 @@ use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Pages\Auth\EditProfile;
 use Filament\Panel;
@@ -25,10 +26,14 @@ class AppPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->default()
             ->id('app')
             ->path('/app')
             ->login()
             ->profile(EditProfile::class, false)
+            ->userMenuItems([
+                'profile' => MenuItem::make()->url(fn (): string => EditProfile::getUrl())
+            ])
             ->colors([
                 'primary' => Color::Amber,
             ])

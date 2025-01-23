@@ -78,8 +78,6 @@ class PartnersResource extends Resource
                             ->required()
                             ->maxLength(255),
 
-
-
                         TextInput::make('servis_distributor')
                             ->label('Service Distributor')
                             ->required()
