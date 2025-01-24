@@ -26,81 +26,47 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class DeviceResource extends Resource
 {
     protected static ?string $model = DeviceInUse::class;
+    protected static ?string $navigationGroup = 'Device Management';
+    protected static ?string $navigationLabel = 'Devices';
+    protected static ?string $modelLabel = 'Your devices';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
+
         return $form
+
             ->schema([
-                TextInput::make('serial_number')
-                    ->regex('/^ER[\dA-Z]\d{4}[A-Z]\d{4}$/')
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                        $prefix = substr($state, 0, 3);
-                        $product = Products::findPrefix($prefix);
-                        if ($product) {
-                            $set('device_name', $product->name);
-                            $set('products_id', $product->id);
-                        }
-                    })
-                    ->required()
-                    ->unique(),
-                Select::make('products_id')
-                    ->relationship('products', 'name')
-                    ->disabled(),
-                Hidden::make('products_id'),
-
-
-                Select::make('device_type')
-                    ->label('Device Type')
-                    ->placeholder('Select device type')
-                    ->options([
-                        'PRO' => 'PRO',
-                        'PRO GPS' => 'PRO GPS',
-                        'PRO RTK' => 'PRO RTK',
-                        'list' => 'List',
-                    ])
-                    ->default('PRO')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                DatePicker::make('registration')
-                    ->label('Date of registration')
-                    ->displayFormat('d/m/Y') // Frontend display
-                    ->native(false)
-                    ->default(Carbon::now()->format('Y-m-d')) // Default backend value
-                    ->readOnly(),
-
-                TextInput::make('qc_data'),
-
-                Forms\Components\RichEditor::make('text'),
+                //
             ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
+        $userId = auth()->id(); // Získa ID prihláseného používateľa
+         return $table
             ->columns([
                 TextColumn::make('serial_number')->searchable(),
                 TextColumn::make('products.name')->searchable(),
                 TextColumn::make('products.id')->searchable(),
-                TextColumn::make('partners.id')->searchable(),
+                TextColumn::make('partners.company_name')->searchable(),
+                TextColumn::make('partners.user_id')->searchable(),
 
-
-            ])
+            ])->query(DeviceInUse::whereHas('partners', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }))
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-;
+
     }
 
     public static function getRelations(): array

@@ -100,10 +100,13 @@ class PartnersResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('partner_name')
+                Tables\Columns\TextColumn::make('company_name')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('country')
+                Tables\Columns\TextColumn::make('city')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('ico')
                     ->sortable()
                     ->searchable(),
 

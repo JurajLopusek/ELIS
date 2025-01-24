@@ -108,7 +108,7 @@ class DevicesResource extends Resource
                     ->form([
                         Select::make('partners_id')
                             ->label('Partner')
-                            ->relationship('partners', 'partner_name')
+                            ->relationship('partners', 'company_name')
                             ->required(),
                         Select::make('device_type')
                             ->label('Device Type')
@@ -123,8 +123,11 @@ class DevicesResource extends Resource
                             ->searchable()
                             ->preload()
                             ->required(),
-                        TextInput::make('cost')->numeric(),
-                        TextInput::make('Message')->nullable(),
+                        TextInput::make('cost')
+                            ->numeric()
+                            ->required(),
+                        TextInput::make('Message')
+                            ->nullable(),
 
                     ])
                     ->action(function ($record, $data) {

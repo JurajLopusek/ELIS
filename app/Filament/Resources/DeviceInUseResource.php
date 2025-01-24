@@ -50,7 +50,7 @@ class DeviceInUseResource extends Resource
                 Hidden::make('product_id'),
 
                 Select::make('partner_id')
-                    ->relationship('partners', 'partner_name'),  // Relácia na serial_number zariadenia
+                    ->relationship('partners', 'company_name'),  // Relácia na serial_number zariadenia
                 TextInput::make('cost')->required(),
             ]);
     }
@@ -63,7 +63,7 @@ class DeviceInUseResource extends Resource
                     ->label('Serial number')
                     ->searchable(),
                 TextColumn::make('device_type')->searchable(),
-                TextColumn::make('partners.partner_name')->searchable()->label('Partner Name'),
+                TextColumn::make('partners.company_name')->searchable()->label('Partner Name'),
                 TextColumn::make("calibration"),
                 TextColumn::make('subscription'),
                 TextColumn::make('products.name')->searchable()->label('Name'),
